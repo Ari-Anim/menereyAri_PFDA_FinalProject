@@ -1,10 +1,11 @@
 # menereyAri_PFDA_FinalProject
 
 ##Repository Link
-<[Link](https://github.com/Ari-Anim/menereyAri_PFDA_FinalProject)>
+ - <[GitHub Repository Link](https://github.com/Ari-Anim/menereyAri_PFDA_FinalProject)>
 
 ##Description
-  Create a fun background based on original characters to help promote original stories I have written.
+
+   - Create a fun background based on original characters to help promote original stories I have written.
   It will contain an interactive character and background.
 
 ##Features
