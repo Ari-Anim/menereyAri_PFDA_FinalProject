@@ -1,7 +1,19 @@
+from PIL import Image
+import glob
+import os
 import pygame
 
 
-class Character_Anim():
+
+class Character_Anim_idle():
+    pass
+
+
+class Character_Anim_right():
+    pass
+
+
+class Character_Anim_left():
     pass
 
 
