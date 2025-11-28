@@ -1,5 +1,23 @@
-def main():
+import pygame
+
+
+class Character_Anim():
     pass
+
+
+class foreground():
+    pass
+
+
+class background():
+    pass
+
+
+def main():
+    pygame.init()
+    pygame.display.set_caption("Interactive Background")
+    pygame.quit()
+    
 
 # TODO Load character frames
 # TODO Organzie Frames
