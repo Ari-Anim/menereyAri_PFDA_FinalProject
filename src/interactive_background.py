@@ -10,12 +10,39 @@ class Character_Anim():
     def __init__(self, mouse_click, mpos_x, mpos_y, 
                  mouse_motion, character_pos=(0,0)):
         self.pos = character_pos
-        self.frame = self.load_frames
+        self.frame = pygame.Surface([1920,1080])
 
+        self.frames = []
+        self.frames.append(pygame.image.load("idle/jumping.png"))
+        self.frames.append(pygame.image.load("idle/landing.png"))
+        self.frames.append(pygame.image.load("idle/mouse_down.png"))
+        self.frames.append(pygame.image.load("idle/move.png"))
+        self.frames.append(pygame.image.load("idle/start_jump.png"))
+        self.frames.append(pygame.image.load("right/jumping.png"))
+        self.frames.append(pygame.image.load("right/landing.png"))
+        self.frames.append(pygame.image.load("right/mouse_down.png"))
+        self.frames.append(pygame.image.load("right/move.png"))
+        self.frames.append(pygame.image.load("right/start_jump.png"))
+        self.frames.append(pygame.image.load("left/jumping.png"))
+        self.frames.append(pygame.image.load("left/landing.png"))
+        self.frames.append(pygame.image.load("left/mouse_down.png"))
+        self.frames.append(pygame.image.load("left/move.png"))
+        self.frames.append(pygame.image.load("left/start_jump.png"))
 
+        self.current_frame = 0
+        self.frame = self.sprites[self.current_frame]
 
-    def load_frames(self, mouse_click, mpos_x, mpos_y):
+        self.rect = self.image.get_rect()
+        self.rect = self.pos
+
+    def _idle(self, mouse_click, mpos_x, mpos_y):
         pass
+
+    def _right():
+         pass
+    
+    def _left():
+         pass
     
     def movement(self, mouse_click, mpos_x, mpos_y, mouse_motion, pos):
         #if mpos_y is below window look down
@@ -60,6 +87,9 @@ def main():
                      mouse_motion = True
                      mpos_x, mpos_y = pygame.mouse.get_pos()
             #Render
+            screen.fill((200,200,0))
+            Character_Anim.draw(screen)
+            pygame.display.flip()
             pygame.display.flip()
     pygame.quit()
     
