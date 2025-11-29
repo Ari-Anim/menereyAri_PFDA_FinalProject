@@ -64,8 +64,9 @@ class background():
 def main():
     pygame.init()
     pygame.display.set_caption("Interactive Background")
-    resolution = (1920, 1080)
-    screen = pygame.displayy.set_mode((resolution), pygame.RESIZABLE)
+    resolution = (800, 800)
+    screen = pygame.display.set_mode((resolution), pygame.RESIZABLE)
+    character = pygame.sprite.Group()
     click = False
     mpos_x = 0
     mpos_y = 0
@@ -77,7 +78,7 @@ def main():
     while running:
 
             for event in pygame.event.get():
-                if event.type == pygame.Quit:
+                if event.type == pygame.QUIT:
                       running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                      click = True
@@ -87,8 +88,8 @@ def main():
                      mouse_motion = True
                      mpos_x, mpos_y = pygame.mouse.get_pos()
             #Render
-            screen.fill((200,200,0))
-            Character_Anim.draw(screen)
+            screen.fill((0,0,0))
+            character.draw(screen)
             pygame.display.flip()
             pygame.display.flip()
     pygame.quit()
