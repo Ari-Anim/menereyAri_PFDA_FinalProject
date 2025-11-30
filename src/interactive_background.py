@@ -7,13 +7,19 @@ import pygame
 
 class Character_Frames():
     
-    def __init__(self, pos=(0,0)):
+    def __init__(self, mpos_x, mouse_motion, click, pos=(400, 800)):
         self.pos = pos
+        self.click = click
+        self.mpos_x = mpos_x
+        self.mouse_motion = mouse_motion
         self.surface = pygame.Surface([800, 800])
         self.jump = self.detect_jump()
         self.movement = self.detect_movement()
 
 
+
+        #re export frames to be just as large as the sprite not the size of the screen 
+        #to make calculations work, otherwise the character will always be idle.
         self.idle_jump_frames = []
         self.idle_jump_frames.append(pygame.image.load("idle/start_jump.png").convert_alpha())
         self.idle_jump_frames.append(pygame.image.load("idle/jumping.png").convert_alpha())
@@ -50,6 +56,15 @@ class Character_Frames():
         self.left_move_frames.append(pygame.image.load("left/left_3.png").convert_alpha())
         self.left_move_frames.append(pygame.image.load("left/left_4.png").convert_alpha())
 
+        self.current_frame = 0
+
+    def update(self):
+        self.current_frame += 1
+        if self.current_frame >= len(self._choose_loop):
+            self.current_frame = 0
+        self.image = self._choose_loop[self.current_frame]
+        self.pos = self.move_character
+
     def detect_movement(self, mpos_x, mouse_motion, pos):
         if mouse_motion == False:
             return "idle"
@@ -60,15 +75,37 @@ class Character_Frames():
         else:
             return "idle"
 
-    def detect_jump(self, click):
-        if click == True:
+    def detect_jump(self):
+        if self.click == True:
             return "jump"
 
-    def _choose_frame(self):
-        pass
+    def _choose_loop(self):
+        if self.detect_movement == "idle" and self.detect_jump == False:
+            return "idle_loop_frames"
+        elif self.detect_movement == "idle" and self.detect_jump == True:
+            return "idle_jump_frames"
+        if self.detect_movement == "right" and self.detect_jump == False:
+            return "right_move_frames"
+        elif self.detect_movement == "right" and self.detect_jump == True:
+            return "right_jump_frames"
+        if self.detect_movement == "left" and self.detect_jump == False:
+            return "left_move_frames"
+        elif self.detect_movement == "left" and self.detect_jump == True:
+            return "left_jump_frames"
+
+    def move_character(self):
+        if self.detect_movement == "right":
+            self.pos[0] -= 8
+            return self.pos
+        elif self. detect_movement == "left":
+            self.pos[0] += 8
+            return self.pos
+        elif self.detect_movement == "idle":
+            return self.pos
+        
 
     def draw_frame(self, surface):
-        pass
+        surface.blit(self.current_frame, self.pos)
 
 
 class foreground():
@@ -82,13 +119,15 @@ class background():
 def main():
     pygame.init()
     pygame.display.set_caption("Interactive Background")
+    clock = pygame.time.Clock()
+    dt = 0
     resolution = (800, 800)
     screen = pygame.display.set_mode((resolution), pygame.RESIZABLE)
-    character = pygame.sprite.Group()
     click = False
     mpos_x = 0
     mpos_y = 0
     mouse_motion = False
+    character = Character_Frames(mpos_x, mouse_motion, click)
     running = True
 
     while running:
@@ -103,15 +142,15 @@ def main():
                 if event.type == pygame.MOUSEMOTION:
                      mouse_motion = True
                      mpos_x, mpos_y = pygame.mouse.get_pos()
+                character.update(dt,mpos_x,mouse_motion, click)
             #Render
             screen.fill((0,0,0))
             character.draw(screen)
             pygame.display.flip()
-            pygame.display.flip()
+            dt = clock.tick(12)
     pygame.quit()
     
 
-# TODO Load character left_
 # TODO Organzie Frames
 # TODO Implement background
 # TODO Make Background Customizeable 
@@ -120,8 +159,6 @@ def main():
 # TODO Setup Animation Loops to be called in Game Loop.
 # TODO set up conditional arguments for which character to use based on mouse input
 # TODO Set up movement of character and speed
-
-
 
 
 
