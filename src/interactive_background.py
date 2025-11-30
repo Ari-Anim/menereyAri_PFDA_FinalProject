@@ -21,10 +21,10 @@ class Character_Frames():
         #re export frames to be just as large as the sprite not the size of the screen 
         #to make calculations work, otherwise the character will always be idle.
         self.idle_jump_frames = []
-        self.idle_jump_frames.append(pygame.image.load("idle/start_jump.png").convert_alpha())
-        self.idle_jump_frames.append(pygame.image.load("idle/jumping.png").convert_alpha())
-        self.idle_jump_frames.append(pygame.image.load("idle/landing.png").convert_alpha())
-        self.idle_jump_frames.append(pygame.image.load("idle/move.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("Idle/start_jump.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("Idle/jumping.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("Idle/landing.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("Idle/idle_1.png").convert_alpha())
 
         self.idle_loop_frames = []
         self.idle_loop_frames.append(pygame.image.load("Idle/idle_1.png").convert_alpha())
@@ -60,17 +60,17 @@ class Character_Frames():
 
     def update(self):
         self.current_frame += 1
-        if self.current_frame >= len(self._choose_loop):
+        if self.current_frame >= 4:
             self.current_frame = 0
         self.image = self._choose_loop[self.current_frame]
         self.pos = self.move_character
 
-    def detect_movement(self, mpos_x, mouse_motion, pos):
-        if mouse_motion == False:
+    def detect_movement(self):
+        if self.mouse_motion == False:
             return "idle"
-        elif mouse_motion == True and mpos_x < pos:
+        elif self.mouse_motion == True and self.mpos_x < self.pos:
             return "right"
-        elif mouse_motion == True and mpos_x > pos:
+        elif self.mouse_motion == True and self.mpos_x > self.pos:
             return "left"
         else:
             return "idle"
@@ -142,7 +142,7 @@ def main():
                 if event.type == pygame.MOUSEMOTION:
                      mouse_motion = True
                      mpos_x, mpos_y = pygame.mouse.get_pos()
-                character.update(dt,mpos_x,mouse_motion, click)
+                character.update()
             #Render
             screen.fill((0,0,0))
             character.draw(screen)
