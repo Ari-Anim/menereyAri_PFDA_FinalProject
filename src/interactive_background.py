@@ -5,17 +5,20 @@ import pygame
 
 
 
-class Character_Anim():
+class Character_Frames():
     
     def __init__(self, pos=(0,0)):
         self.pos = pos
-        self.frame = pygame.Surface([1920,1080])
+        self.surface = pygame.Surface([800, 800])
+        self.jump = self.detect_jump()
+        self.movement = self.detect_movement()
+
 
         self.idle_jump_frames = []
-        self.idle_frames.append(pygame.image.load("idle/start_jump.png").convert_alpha())
-        self.idle_frames.append(pygame.image.load("idle/jumping.png").convert_alpha())
-        self.idle_frames.append(pygame.image.load("idle/landing.png").convert_alpha())
-        self.idle_frames.append(pygame.image.load("idle/move.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("idle/start_jump.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("idle/jumping.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("idle/landing.png").convert_alpha())
+        self.idle_jump_frames.append(pygame.image.load("idle/move.png").convert_alpha())
 
         self.idle_loop_frames = []
         self.idle_loop_frames.append(pygame.image.load("Idle/idle_1.png").convert_alpha())
@@ -24,10 +27,10 @@ class Character_Anim():
         self.idle_loop_frames.append(pygame.image.load("Idle/idle_4.png").convert_alpha())
 
         self.right_jump_frames = []
-        self.right_frames.append(pygame.image.load("right/start_jump.png").convert_alpha())
-        self.right_frames.append(pygame.image.load("right/jumping.png").convert_alpha())
-        self.right_frames.append(pygame.image.load("right/landing.png").convert_alpha())
-        self.right_frames.append(pygame.image.load("right/right_1.png").convert_alpha())
+        self.right_jump_frames.append(pygame.image.load("right/start_jump.png").convert_alpha())
+        self.right_jump_frames.append(pygame.image.load("right/jumping.png").convert_alpha())
+        self.right_jump_frames.append(pygame.image.load("right/landing.png").convert_alpha())
+        self.right_jump_frames.append(pygame.image.load("right/right_1.png").convert_alpha())
 
         self.right_move_frames = []
         self.right_move_frames.append(pygame.image.load("right/right_1.png").convert_alpha())
@@ -36,10 +39,10 @@ class Character_Anim():
         self.right_move_frames.append(pygame.image.load("right/right_4.png").convert_alpha())
 
         self.left_jump_frames = []
-        self.left_frames.append(pygame.image.load("left/start_jump.png").convert_alpha())
-        self.left_frames.append(pygame.image.load("left/jumping.png").convert_alpha())
-        self.left_frames.append(pygame.image.load("left/landing.png").convert_alpha())
-        self.left_frames.append(pygame.image.load("left/left_1.png").convert_alpha())
+        self.left_jump_frames.append(pygame.image.load("left/start_jump.png").convert_alpha())
+        self.left_jump_frames.append(pygame.image.load("left/jumping.png").convert_alpha())
+        self.left_jump_frames.append(pygame.image.load("left/landing.png").convert_alpha())
+        self.left_jump_frames.append(pygame.image.load("left/left_1.png").convert_alpha())
 
         self.left_move_frames = []
         self.left_move_frames.append(pygame.image.load("left/left_1.png").convert_alpha())
@@ -47,24 +50,26 @@ class Character_Anim():
         self.left_move_frames.append(pygame.image.load("left/left_3.png").convert_alpha())
         self.left_move_frames.append(pygame.image.load("left/left_4.png").convert_alpha())
 
-        self.current_frame = 0
-        self.frame = self.sprites[self.current_frame]
+    def detect_movement(self, mpos_x, mouse_motion, pos):
+        if mouse_motion == False:
+            return "idle"
+        elif mouse_motion == True and mpos_x < pos:
+            return "right"
+        elif mouse_motion == True and mpos_x > pos:
+            return "left"
+        else:
+            return "idle"
 
-        self.rect = self.image.get_rect()
-        self.rect = self.pos
+    def detect_jump(self, click):
+        if click == True:
+            return "jump"
 
-    def _detect_movement(self, mouse_click, mpos_x, mpos_y, mouse_motion, pos):
-        #if mpos_y is outside window idle
-        #if mpos_x is to the left side use left loop
-        #if mpos_x is to the right side use right loop
-        #if mouse_motion = False use idle loop.
+    def _choose_frame(self):
         pass
 
-    def _detect_jump(self, mouse_click):
+    def draw_frame(self, surface):
         pass
 
-    def choose_frame(self):
-        pass
 
 class foreground():
     pass
@@ -83,8 +88,6 @@ def main():
     click = False
     mpos_x = 0
     mpos_y = 0
-    character_pos_x = 0
-    character_pos_y = 0
     mouse_motion = False
     running = True
 
