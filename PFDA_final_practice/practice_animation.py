@@ -2,9 +2,9 @@ import pygame
 import sys
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, screen_size):
+    def __init__(self, pos_x, pos_y, screen_res):
         super().__init__()
-        self.screen = screen_size
+        self.screen = screen_res
         self.frames = []
         self.frames_2 = []
         self.frames_3 = []
@@ -65,11 +65,11 @@ class Character(pygame.sprite.Sprite):
          if click == True:
              self.is_jumping = True
     
-    def detect_motion(self, mpos_x, mpos_y, screen_size):
+    def detect_motion(self, mpos_x, mpos_y, screen_res):
         mouse_x = mpos_x
         mouse_y = mpos_y
-        s_x = screen_size[0]
-        s_y = screen_size[1]
+        s_x = screen_res[0]
+        s_y = screen_res[1]
         if self.is_jumping == True:
             if mpos_x > s_x or mpos_x < 0:
                 self.move_l = False
@@ -106,11 +106,13 @@ class Character(pygame.sprite.Sprite):
         if self.is_jumping == False and self.looping == True:
             if self.move_r == True:
                 self.current_frame += 1
+                self.pos_x += 60
                 if self.current_frame >= len(self.frames_3):
                     self.current_frame = 0
                 self.image = self.frames_3[self.current_frame]
             elif self.move_l == True:
                 self.current_frame += 1
+                self.pos_x -=60
                 if self.current_frame >= len(self.frames_5):
                     self.current_frame = 0
                 self.image = self.frames_5[self.current_frame]
@@ -127,8 +129,8 @@ class Character(pygame.sprite.Sprite):
              if self.move_r == True:
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_4):
-                         self.current_frame = 0
-                         self.is_jumping = False
+                        self.current_frame = 0
+                        self.is_jumping = False
                     self.image = self.frames_4[self.current_frame]
              elif self.move_l == True:
                     self.current_frame += 1
@@ -155,12 +157,13 @@ class Character(pygame.sprite.Sprite):
 
 
 
+
 pygame.init()
 clock = pygame.time.Clock()
 
 screen_width = 800
 screen_height = 800
-screen_size = [screen_width,screen_height]
+screen_res = [screen_width,screen_height]
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Character_Animation")
 
@@ -168,7 +171,7 @@ moving_character = pygame.sprite.Group()
 char_x = 250
 char_y = 575
 speed = 10
-character = Character(char_x,char_y,screen_size)
+character = Character(char_x,char_y,screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
@@ -180,11 +183,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        #past_pos = pygame.mouse.get_pos
-        #if pygame.mouse.get_rel() != past_pos:
         if event.type == pygame.MOUSEMOTION:
             mpos_x, mpos_y = event.pos
-            character.detect_motion(mpos_x, mpos_y, screen_size)
+            character.detect_motion(mpos_x, mpos_y, screen_res)
             dt = 12
             character.loop(mpos_x, mpos_y)
             """character.update_pos()"""
