@@ -140,7 +140,11 @@ class Character(pygame.sprite.Sprite):
 
     
     def update_pos(self):
-         pass
+         if self.move_l == True:
+              self.pos_x -= 15
+         elif self.move_r == True:
+              self.pos_x += 15
+
 
 
 pygame.init()
@@ -169,6 +173,7 @@ while True:
                 character.detect_motion(mpos_x, mpos_y, screen_size)
                 dt = 12
                 character.loop()
+                character.update_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
                 character.jump()
         
