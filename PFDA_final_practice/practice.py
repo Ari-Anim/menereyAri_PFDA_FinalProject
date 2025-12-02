@@ -137,13 +137,18 @@ class Character(pygame.sprite.Sprite):
                   self.current_frame = 0
                   self.is_jumping = False
              self.image = self.frames_2[self.current_frame]
+        
+        if self.move_l == True:
+            self.pos_x -= 15
+        elif self.move_r == True:
+             self.move_r
 
     
-    def update_pos(self):
+    """def update_pos(self):
          if self.move_l == True:
               self.pos_x -= 15
          elif self.move_r == True:
-              self.pos_x += 15
+              self.pos_x += 15"""
 
 
 
@@ -162,6 +167,7 @@ moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
 dt = 12
+click =False
 
 while True:
     for event in pygame.event.get():
@@ -173,9 +179,10 @@ while True:
                 character.detect_motion(mpos_x, mpos_y, screen_size)
                 dt = 12
                 character.loop()
-                character.update_pos()
+                """character.update_pos()"""
         if event.type == pygame.MOUSEBUTTONDOWN:
-                character.jump()
+                click = True
+                character.jump(click)
         
     
     screen.fill((0,0,0))
