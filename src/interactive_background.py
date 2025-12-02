@@ -58,16 +58,19 @@ class Character_Frames():
         self.left_move_frames.append(pygame.image.load("left_4.png").convert_alpha())
 
         self.current_frame = 0
-        self.current_loop = [self.idle_loop_frames, self.idle_jump_frames, self.right_move_frames, 
+        anim_loops = [self.idle_loop_frames, self.idle_jump_frames, self.right_move_frames, 
                              self.right_jump_frames, self.left_move_frames, self.left_jump_frames]
-        self.image = self.current_loop[self._choose_loop[self.current_frame]]
+        chosen_loop = self._choose_loop(anim_loops)
+        chosen_frame = self.current_frame
+        print(chosen_frame)
+        self.image = chosen_loop[chosen_frame]
 
 
     def update(self):
         self.current_frame += 1
         if self.current_frame >= 4:
             self.current_frame = 0
-        self.image = self._choose_loop(self.current_frame)
+        self.image = self.current_loop[self._choose_loop()[self.current_frame]]
         self.pos = self.move_character
 
     def detect_movement(self):
@@ -84,19 +87,19 @@ class Character_Frames():
         if self.click == True:
             return "jump"
         
-    def _choose_loop(self, current_frame):
-        if self.detect_movement == "idle" and self.detect_jump == False and current_frame == 0:
-            return "idle_loop_frames[0]"
+    def _choose_loop(self, anim_loops):
+        if self.detect_movement == "idle" and self.detect_jump == False:
+            return anim_loops[0]
         elif self.detect_movement == "idle" and self.detect_jump == True:
-            return "idle_jump_frames"
+            return anim_loops[1]
         if self.detect_movement == "right" and self.detect_jump == False:
-            return "right_move_frames"
+            return anim_loops[2]
         elif self.detect_movement == "right" and self.detect_jump == True:
-            return "right_jump_frames"
+            return anim_loops[3]
         if self.detect_movement == "left" and self.detect_jump == False:
-            return "left_move_frames"
+            return anim_loops[4]
         elif self.detect_movement == "left" and self.detect_jump == True:
-            return "left_jump_frames"
+            return anim_loops[5]
 
     def move_character(self):
         if self.detect_movement == "right":
