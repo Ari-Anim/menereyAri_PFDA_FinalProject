@@ -120,11 +120,13 @@ class Character(pygame.sprite.Sprite):
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_4):
                          self.current_frame = 0
+                         self.is_jumping = False
                     self.image = self.frames_4[self.current_frame]
              elif self.move_l == True:
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_6):
                          self.current_frame = 0
+                         self.is_jumping = False
                     self.image = self.frames_6[self.current_frame]
         elif self.is_jumping == True and self.looping == False:
              self.idle = True
@@ -133,18 +135,12 @@ class Character(pygame.sprite.Sprite):
              self.current_frame += 1
              if self.current_frame >= len(self.frames_2):
                   self.current_frame = 0
+                  self.is_jumping = False
              self.image = self.frames_2[self.current_frame]
 
     
-    def update_right(self):
-        pass
-
-    def update_left(self):
-        pass
-    
-    def jump(self):
-        pass
-
+    def update_pos(self):
+         pass
 
 
 pygame.init()
@@ -171,12 +167,10 @@ while True:
         if event.type == pygame.MOUSEMOTION:
                 mpos_x, mpos_y = event.pos
                 character.detect_motion(mpos_x, mpos_y, screen_size)
-        if event.type == pygame.MOUSEBUTTONDOWN:
                 dt = 12
                 character.loop()
-        if event.type == pygame.MOUSEBUTTONUP:
-                dt = 6
-                character.end_loop()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                character.jump()
         
     
     screen.fill((0,0,0))
