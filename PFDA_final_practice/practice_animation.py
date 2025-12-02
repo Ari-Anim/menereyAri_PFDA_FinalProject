@@ -167,11 +167,11 @@ pygame.display.set_caption("Character_Animation")
 moving_character = pygame.sprite.Group()
 char_x = 250
 char_y = 575
+speed = 10
 character = Character(char_x,char_y,screen_size)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
-speed = 15
 dt = 12
 click =False
 
@@ -180,19 +180,18 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        #past_pos = pygame.mouse.get_pos
+        #if pygame.mouse.get_rel() != past_pos:
         if event.type == pygame.MOUSEMOTION:
-                mpos_x, mpos_y = event.pos
-                character.detect_motion(mpos_x, mpos_y, screen_size)
-                dt = 12
-                character.loop(mpos_x, mpos_y)
-                """character.update_pos()"""
+            mpos_x, mpos_y = event.pos
+            character.detect_motion(mpos_x, mpos_y, screen_size)
+            dt = 12
+            character.loop(mpos_x, mpos_y)
+            """character.update_pos()"""
         if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
                 character.jump(click)
-        if mpos_x > char_x:
-             char_x += speed
-        if mpos_x < char_x:
-             char_x -= speed
+        
         
     
     screen.fill((50,0,50))
