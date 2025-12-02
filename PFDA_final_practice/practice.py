@@ -121,6 +121,19 @@ class Character(pygame.sprite.Sprite):
                     if self.current_frame >= len(self.frames_4):
                          self.current_frame = 0
                     self.image = self.frames_4[self.current_frame]
+             elif self.move_l == True:
+                    self.current_frame += 1
+                    if self.current_frame >= len(self.frames_6):
+                         self.current_frame = 0
+                    self.image = self.frames_6[self.current_frame]
+        elif self.is_jumping == True and self.looping == False:
+             self.idle = True
+             self.move_l = False
+             self.move_r = False
+             self.current_frame += 1
+             if self.current_frame >= len(self.frames_2):
+                  self.current_frame = 0
+             self.image = self.frames_2[self.current_frame]
 
     
     def update_right(self):
