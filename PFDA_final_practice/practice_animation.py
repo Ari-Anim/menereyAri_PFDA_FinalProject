@@ -59,7 +59,7 @@ class Character(pygame.sprite.Sprite):
              self.looping = False
     
     def end_loop(self):
-        self.looping = True
+        self.looping = False
         self.move_l = False
         self.move_r = False
         self.idle = True
@@ -111,13 +111,13 @@ class Character(pygame.sprite.Sprite):
         if self.is_jumping == False and self.looping == True:
             if self.move_r == True:
                 self.current_frame += 1
-                self.pos_x += 60
+                self.pos_x += 30
                 if self.current_frame >= len(self.frames_3):
                     self.current_frame = 0
                 self.image = self.frames_3[self.current_frame]
             elif self.move_l == True:
                 self.current_frame += 1
-                self.pos_x -=60
+                self.pos_x -=30
                 if self.current_frame >= len(self.frames_5):
                     self.current_frame = 0
                 self.image = self.frames_5[self.current_frame]
@@ -133,13 +133,13 @@ class Character(pygame.sprite.Sprite):
              #self.current_frame = 0
              if self.move_r == True:
                     self.current_frame += 1
-                    self.pos_x += 60
+                    self.pos_x += 30
                     if self.current_frame >= len(self.frames_4):
                         self.current_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_frame]
              elif self.move_l == True:
-                    self.pos_x += 60
+                    self.pos_x += 30
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_6):
                          self.current_frame = 0
@@ -176,12 +176,12 @@ clock = pygame.time.Clock()
 screen_width = 800
 screen_height = 800
 screen_res = [screen_width,screen_height]
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Character_Animation")
 
 moving_character = pygame.sprite.Group()
-char_x = 250
-char_y = 575
+char_x = screen_width//2 - 150
+char_y = screen_height - 225
 speed = 10
 character = Character(char_x,char_y,screen_res)
 moving_character.add(character)
