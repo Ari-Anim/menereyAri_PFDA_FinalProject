@@ -53,13 +53,17 @@ class Character(pygame.sprite.Sprite):
     def loop(self, mpos_x, mpos_y):
         screen_x = self.screen[0]
         screen_y = self.screen[1]
-        if 0 <= mpos_x <= screen_x and 0 <= screen_y <= screen_y:
+        if 0 <= mpos_x <= screen_x and 0 <= mpos_y <= screen_y:
             self.looping = True
         else:
              self.looping = False
     
     def end_loop(self):
-        self.looping = False
+        self.looping = True
+        self.move_l = False
+        self.move_r = False
+        self.idle = True
+        self.is_jumping = False
 
     def jump(self, click):
          if click == True:
@@ -100,7 +104,7 @@ class Character(pygame.sprite.Sprite):
                 self.move_r = True
                 self.move_l = False
                 self.idle = False
-        self.rect.topleft = [self.pos_x,self.pos_y]
+
 
 
     def update(self):
@@ -129,11 +133,13 @@ class Character(pygame.sprite.Sprite):
              #self.current_frame = 0
              if self.move_r == True:
                     self.current_frame += 1
+                    self.pos_x += 60
                     if self.current_frame >= len(self.frames_4):
                         self.current_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_frame]
              elif self.move_l == True:
+                    self.pos_x += 60
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_6):
                          self.current_frame = 0
@@ -147,6 +153,11 @@ class Character(pygame.sprite.Sprite):
                     self.current_frame = 0
                     self.is_jumping = False
                 self.image = self.frames_2[self.current_frame]  
+        self.rect.topleft = [self.pos_x,self.pos_y]
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > self.screen[1]:
+            self.rect.left = (self.screen[1] - 225)
 
 
     
@@ -165,7 +176,7 @@ clock = pygame.time.Clock()
 screen_width = 800
 screen_height = 800
 screen_res = [screen_width,screen_height]
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("Character_Animation")
 
 moving_character = pygame.sprite.Group()
@@ -191,9 +202,13 @@ while True:
             character.loop(mpos_x, mpos_y)
             """character.update_pos()"""
         if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
                 click = True
                 character.jump(click)
-        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:
+                character.end_loop()
+    
         
     
     screen.fill((50,0,50))
