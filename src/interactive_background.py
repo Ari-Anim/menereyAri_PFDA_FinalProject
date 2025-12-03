@@ -161,6 +161,20 @@ class Character(pygame.sprite.Sprite):
 
 
 
+class Background():
+    def __init__(self, dt, screen_res, red, green, blue):
+        self.dt = dt
+        self.screen = screen_res
+        self.red = red
+        self.green = green
+        self.blue = blue
+    
+    def update(self, click):
+        if click == True:
+            self.red += 50
+            self.blue += 50
+
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -169,7 +183,7 @@ screen_height = 800
 screen_res = [screen_width,screen_height]
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Character_Animation")
-
+bkg = Background()
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
 char_y = screen_height - 225
@@ -179,6 +193,9 @@ moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
 dt = 12
+red = 50
+blue = 50
+green = 0
 click =False
 
 while True:
@@ -195,13 +212,17 @@ while True:
             if event.button == 1:
                 click = True
                 character.jump(click)
+                bkg.update(click)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:
                 character.end_loop()
     
-        
+    if red > 50:
+        red -= 10
+    if blue > 50:
+        blue -= 10
     
-    screen.fill((50,0,50))
+    screen.fill((red,green,blue))
     moving_character.draw(screen)
     moving_character.update()
     pygame.display.flip()
