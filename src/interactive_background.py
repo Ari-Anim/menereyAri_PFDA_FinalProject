@@ -185,7 +185,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Character_Animation")
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
-char_y = screen_height - 225
+char_y = screen_height - 100
 speed = 10
 character = Character(char_x,char_y,screen_res)
 moving_character.add(character)
