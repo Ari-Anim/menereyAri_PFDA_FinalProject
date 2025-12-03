@@ -48,7 +48,7 @@ class Character(pygame.sprite.Sprite):
         self.image = self.frames[self.current_frame]
 
         self.rect = self.image.get_rect()
-        self.rect.topleft = [pos_x,pos_y]
+        self.rect.topleft = [self.pos_x,self.pos_y]
 
     def loop(self, mpos_x, mpos_y):
         screen_x = self.screen[0]
@@ -100,6 +100,7 @@ class Character(pygame.sprite.Sprite):
                 self.move_r = True
                 self.move_l = False
                 self.idle = False
+        self.rect.topleft = [self.pos_x,self.pos_y]
 
 
     def update(self):
