@@ -206,3 +206,19 @@ while True:
     moving_character.update()
     pygame.display.flip()
     clock.tick(dt)
+
+    
+
+# TODO Organzie Frames
+# TODO Implement background
+# TODO Make Background Customizeable 
+# TODO implement foreground
+# TODO init pygame
+# TODO Setup Animation Loops to be called in Game Loop.
+# TODO set up conditional arguments for which character to use based on mouse input
+# TODO Set up movement of character and speed
+
+
+
+if __name__ == "__main__":
+    main()
