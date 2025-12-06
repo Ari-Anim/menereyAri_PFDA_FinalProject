@@ -174,6 +174,12 @@ class Character(pygame.sprite.Sprite):
             self.red += 50
             self.blue += 50"""
 
+class Foreground():
+    def __init__(self, screen_res, red, green, blue):
+        self.screen = screen_res
+        
+        pass    
+
 
 pygame.init()
 clock = pygame.time.Clock()
