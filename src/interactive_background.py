@@ -135,7 +135,7 @@ class Character(pygame.sprite.Sprite):
              #self.current_frame = 0
              if self.move_r == True:
                     self.current_jump_frame += 1
-                    self.pos_x += 30
+                    self.pos_x += 80
                     if self.current_jump_frame <= 1:
                         self.pos_y += 50
                     if self.current_jump_frame == 2:
@@ -147,7 +147,7 @@ class Character(pygame.sprite.Sprite):
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_jump_frame]
              elif self.move_l == True:
-                    self.pos_x -= 30
+                    self.pos_x -= 80
                     self.current_jump_frame += 1
                     if self.current_jump_frame <= 1:
                         self.pos_y += 50
@@ -175,8 +175,15 @@ class Character(pygame.sprite.Sprite):
         self.rect.topleft = [self.pos_x,self.pos_y]
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > self.screen[1]:
-            self.rect.left = (self.screen[1] - 225)
+            self.move_l = False
+            self.looping = False
+            self.idle = True
+        if self.rect.right > 1200:
+            self.rect.right = 1200
+            self.move_r = False
+            self.looping = False
+            self.idle = True
+
 
 
 
@@ -234,7 +241,7 @@ class Obstacles(pygame.sprite.Sprite):
 pygame.init()
 clock = pygame.time.Clock()
 
-screen_width = 800
+screen_width = 1200
 screen_height = 800
 screen_res = [screen_width,screen_height]
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -250,7 +257,7 @@ obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
-dt = 6
+dt = 1
 red = 50
 green = 0
 blue = 50
