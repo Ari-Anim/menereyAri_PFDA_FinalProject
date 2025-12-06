@@ -18,6 +18,7 @@ class Character(pygame.sprite.Sprite):
         self.move_r = False
         self.idle = True
         self.is_jumping = False
+        self.first_frame = False
 
         self.frames.append(pygame.image.load('idle_1.png'))
         self.frames.append(pygame.image.load('idle_2.png'))
@@ -68,6 +69,8 @@ class Character(pygame.sprite.Sprite):
     def jump(self, click):
          if click == True:
              self.is_jumping = True
+             self.pos_y += 15
+         self.pos_y -= 15
     
     def detect_motion(self, mpos_x, mpos_y, screen_res):
         mouse_x = mpos_x
@@ -139,20 +142,23 @@ class Character(pygame.sprite.Sprite):
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_frame]
              elif self.move_l == True:
-                    self.pos_x += 30
+                    self.pos_x -= 30
                     self.current_frame += 1
                     if self.current_frame >= len(self.frames_6):
                          self.current_frame = 0
                          self.is_jumping = False
                     self.image = self.frames_6[self.current_frame]
-        elif self.is_jumping == True and self.looping == False:
-            #self.current_frame = 0
-            if self.idle == True:
-                self.current_frame += 1
-                if self.current_frame >= len(self.frames_2):
-                    self.current_frame = 0
-                    self.is_jumping = False
-                self.image = self.frames_2[self.current_frame]  
+        elif self.is_jumping == True and self.looping == False: 
+                self.first_frame = True
+                if self.idle == True:
+                    if self.first_frame == True:
+                        self.current_frame = 0
+                        self.first_frame = False
+                    self.current_frame += 1
+                    if self.current_frame >= len(self.frames_2):
+                        self.current_frame = 0
+                        self.is_jumping = False
+                    self.image = self.frames_2[self.current_frame]  
         self.rect.topleft = [self.pos_x,self.pos_y]
         if self.rect.left < 0:
             self.rect.left = 0
@@ -174,11 +180,42 @@ class Character(pygame.sprite.Sprite):
             self.red += 50
             self.blue += 50"""
 
-class Foreground():
-    def __init__(self, screen_res, red, green, blue):
+class Obstacles(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, screen_res):
         self.screen = screen_res
-        
-        pass    
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.coords = (self.pos_x, self.pos_y)
+        self.looping = False
+        self.obstacle_frames = []
+
+        self.obstacle_frames.append(pygame.image.load('obstacle_1.png'))
+        self.obstacle_frames.append(pygame.image.load('obstacle_2.png'))
+        self.obstacle_frames.append(pygame.image.load('obstacle_3.png'))
+        self.obstacle_frames.append(pygame.image.load('obstacle_4.png'))
+
+        self.current_frame = 0
+        self.image = self.obstacle_frames[self.current_frame]
+
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.pos_x,self.pos_y]
+
+
+    def check_looping(self, running):
+        if running == True:
+            self.looping = True
+
+
+    def update(self):
+        if self.looping == True:
+            self.current_frame += 1
+            if self.current_frame >= len(self.obstacle_frames):
+                self.current_frame = 0
+            self.image = self.obstacle_frames[self.current_frame]
+    
+    def draw(self, surface):
+        if self.looping == True:
+            surface.blit(self.image,self.coords)
 
 
 pygame.init()
@@ -194,6 +231,9 @@ char_x = screen_width//2 - 150
 char_y = screen_height - 100
 speed = 10
 character = Character(char_x,char_y,screen_res)
+obst_x = screen_width//2 - 300
+obst_y = screen_height - 100
+obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
@@ -203,14 +243,18 @@ green = 0
 blue = 50
 #bkg = Background(dt, screen_res, red, green, blue)
 click =False
+mouse_motion = False
+running = True
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            running = False
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEMOTION:
             mpos_x, mpos_y = event.pos
+            mouse_motion = True
             character.detect_motion(mpos_x, mpos_y, screen_res)
             dt = 12
             character.loop(mpos_x, mpos_y)
@@ -226,6 +270,7 @@ while True:
             if event.button == 1:
                 red += 50
                 blue += 50
+        obstacle.check_looping(running)
     
     if red > 70:
         red -= 5
@@ -239,6 +284,8 @@ while True:
     screen.fill((red,green,blue))
     moving_character.draw(screen)
     moving_character.update()
+    obstacle.draw(screen)
+    obstacle.update()
     pygame.display.flip()
     clock.tick(dt)
 
