@@ -18,7 +18,7 @@ class Character(pygame.sprite.Sprite):
         self.move_r = False
         self.idle = True
         self.is_jumping = False
-        self.first_frame = False
+
 
         self.frames.append(pygame.image.load('idle_1.png'))
         self.frames.append(pygame.image.load('idle_2.png'))
@@ -46,6 +46,7 @@ class Character(pygame.sprite.Sprite):
         self.frames_6.append(pygame.image.load('left_landing.png'))
 
         self.current_frame = 0
+        self.current_jump_frame = 0
         self.image = self.frames[self.current_frame]
 
         self.rect = self.image.get_rect()
@@ -69,8 +70,6 @@ class Character(pygame.sprite.Sprite):
     def jump(self, click):
          if click == True:
              self.is_jumping = True
-             self.pos_y += 15
-         self.pos_y -= 15
     
     def detect_motion(self, mpos_x, mpos_y, screen_res):
         mouse_x = mpos_x
@@ -110,7 +109,7 @@ class Character(pygame.sprite.Sprite):
 
 
 
-    def update(self):
+    def update(self,):
         if self.is_jumping == False and self.looping == True:
             if self.move_r == True:
                 self.current_frame += 1
@@ -135,30 +134,44 @@ class Character(pygame.sprite.Sprite):
         elif self.is_jumping == True and self.looping == True:
              #self.current_frame = 0
              if self.move_r == True:
-                    self.current_frame += 1
+                    self.current_jump_frame += 1
                     self.pos_x += 30
-                    if self.current_frame >= len(self.frames_4):
-                        self.current_frame = 0
+                    if self.current_jump_frame <= 1:
+                        self.pos_y += 50
+                    if self.current_jump_frame == 2:
+                        self.pos_y = 650
+                    if self.current_jump_frame == 3:
+                        self.pos_y = 700
+                    if self.current_jump_frame >= len(self.frames_4):
+                        self.current_jump_frame = 0
                         self.is_jumping = False
-                    self.image = self.frames_4[self.current_frame]
+                    self.image = self.frames_4[self.current_jump_frame]
              elif self.move_l == True:
                     self.pos_x -= 30
-                    self.current_frame += 1
-                    if self.current_frame >= len(self.frames_6):
-                         self.current_frame = 0
+                    self.current_jump_frame += 1
+                    if self.current_jump_frame <= 1:
+                        self.pos_y += 50
+                    if self.current_jump_frame == 2:
+                        self.pos_y = 650
+                    if self.current_jump_frame == 3:
+                        self.pos_y = 700
+                    if self.current_jump_frame >= len(self.frames_6):
+                         self.current_jump_frame = 0
                          self.is_jumping = False
-                    self.image = self.frames_6[self.current_frame]
+                    self.image = self.frames_6[self.current_jump_frame]
         elif self.is_jumping == True and self.looping == False: 
-                self.first_frame = True
                 if self.idle == True:
-                    if self.first_frame == True:
-                        self.current_frame = 0
-                        self.first_frame = False
-                    self.current_frame += 1
-                    if self.current_frame >= len(self.frames_2):
-                        self.current_frame = 0
+                    self.current_jump_frame += 1
+                    if self.current_jump_frame <= 1:
+                        self.pos_y += 50
+                    if self.current_jump_frame == 2:
+                        self.pos_y = 650
+                    if self.current_jump_frame == 3:
+                        self.pos_y = 700
+                    if self.current_jump_frame >= len(self.frames_2):
+                        self.current_jump_frame = 0
                         self.is_jumping = False
-                    self.image = self.frames_2[self.current_frame]  
+                    self.image = self.frames_2[self.current_jump_frame]  
         self.rect.topleft = [self.pos_x,self.pos_y]
         if self.rect.left < 0:
             self.rect.left = 0
@@ -229,7 +242,7 @@ pygame.display.set_caption("Character_Animation")
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
 char_y = screen_height - 100
-speed = 10
+speed = 5
 character = Character(char_x,char_y,screen_res)
 obst_x = screen_width//2 - 300
 obst_y = screen_height - 100
@@ -237,7 +250,7 @@ obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
-dt = 12
+dt = 6
 red = 50
 green = 0
 blue = 50
