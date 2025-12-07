@@ -109,7 +109,9 @@ class Character(pygame.sprite.Sprite):
 
 
 
-    def update(self,):
+    def update(self):
+        s_x = self.screen[0]
+        s_y = self.screen[1]
         if self.is_jumping == False and self.looping == True:
             if self.move_r == True:
                 self.current_frame += 1
@@ -136,12 +138,12 @@ class Character(pygame.sprite.Sprite):
              if self.move_r == True:
                     self.current_jump_frame += 1
                     self.pos_x += 80
-                    if self.current_jump_frame <= 1:
-                        self.pos_y += 50
+                    if self.current_jump_frame == 1:
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 2:
-                        self.pos_y = 650
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = 700
+                        self.pos_y = s_y - 150
                     if self.current_jump_frame >= len(self.frames_4):
                         self.current_jump_frame = 0
                         self.is_jumping = False
@@ -149,12 +151,12 @@ class Character(pygame.sprite.Sprite):
              elif self.move_l == True:
                     self.pos_x -= 80
                     self.current_jump_frame += 1
-                    if self.current_jump_frame <= 1:
-                        self.pos_y += 50
+                    if self.current_jump_frame == 1:
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 2:
-                        self.pos_y = 650
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = 700
+                        self.pos_y = s_y - 150
                     if self.current_jump_frame >= len(self.frames_6):
                          self.current_jump_frame = 0
                          self.is_jumping = False
@@ -162,12 +164,12 @@ class Character(pygame.sprite.Sprite):
         elif self.is_jumping == True and self.looping == False: 
                 if self.idle == True:
                     self.current_jump_frame += 1
-                    if self.current_jump_frame <= 1:
-                        self.pos_y += 50
+                    if self.current_jump_frame == 1:
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 2:
-                        self.pos_y = 650
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = 700
+                        self.pos_y = s_y - 150
                     if self.current_jump_frame >= len(self.frames_2):
                         self.current_jump_frame = 0
                         self.is_jumping = False
@@ -179,7 +181,7 @@ class Character(pygame.sprite.Sprite):
             self.looping = False
             self.idle = True
         if self.rect.right > 1200:
-            self.rect.right = 1200
+            self.rect.left = 1100
             self.move_r = False
             self.looping = False
             self.idle = True
@@ -248,16 +250,16 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Character_Animation")
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
-char_y = screen_height - 100
+char_y = screen_height - 150
 speed = 5
 character = Character(char_x,char_y,screen_res)
 obst_x = screen_width//2 - 300
-obst_y = screen_height - 100
+obst_y = screen_height - 150
 obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
-dt = 1
+dt = 12
 red = 50
 green = 0
 blue = 50
@@ -307,7 +309,7 @@ while True:
     obstacle.draw(screen)
     obstacle.update()
     pygame.display.flip()
-    clock.tick(dt)
+    clock.tick(12)
 
     
 
