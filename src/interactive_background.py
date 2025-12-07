@@ -235,26 +235,11 @@ class Obstacles(pygame.sprite.Sprite):
 
 
 
-class Grass(pygame.sprite.Sprite):
+class Grass():
     def __init__(self):
-        pass
-
-
-
-class Background():
-    def __init__(self, dt, screen_res):
-        self.dt = dt
-        self.screen = screen_res
-        self.img_path = "bkg.png"
-        self.img_path_2 = "floor.png"
-        self.img_path_3 = "clouds.png"
-        self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
-        self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
-        self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
-        self.cloud_pos_x = 0
-        self.floor_pos_x = -1200
-        self.grass_pos_y = 700
+        self.grass_pos_y = 500
         self.grass_pos_x = -1200
+
         self.grass = []
         self.grass.append(pygame.image.load('grass_i1.png'))
         self.grass.append(pygame.image.load('grass_l1.png'))
@@ -271,21 +256,59 @@ class Background():
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.grass_pos_x,self.grass_pos_y]
 
+
+    def update(self):
+        self.current_frame += 1
+        if self.current_frame >= len(self.grass):
+            self.current_frame = 0
+        self.image = self.grass[self.current_frame]
+    
+    def draw(self, screeen):
+        surface = screen
+        if self.current_frame == 0:
+            surface.blit(self.grass[0], (0,self.grass_pos_y))
+        if self.current_frame == 1:
+            surface.blit(self.grass[1], (0,self.grass_pos_y))
+        if self.current_frame == 2:
+            surface.blit(self.grass[2], (0,self.grass_pos_y))
+        if self.current_frame == 3:
+            surface.blit(self.grass[3], (0,self.grass_pos_y))
+        if self.current_frame == 4:
+            surface.blit(self.grass[4], (0,self.grass_pos_y))
+        if self.current_frame == 5:
+            surface.blit(self.grass[5], (0,self.grass_pos_y))   
+        if self.current_frame == 6:
+            surface.blit(self.grass[6], (0,self.grass_pos_y))
+        if self.current_frame == 7:
+            surface.blit(self.grass[7], (0,self.grass_pos_y))
+
+
+
+
+class Background():
+    def __init__(self, dt, screen_res):
+        self.dt = dt
+        self.screen = screen_res
+        self.img_path = "bkg.png"
+        self.img_path_2 = "floor.png"
+        self.img_path_3 = "clouds.png"
+        self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
+        self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
+        self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
+        self.cloud_pos_x = 0
+        self.floor_pos_x = -1200
+
     
     def update(self):
         self.floor_pos_x += 30
         if self.floor_pos_x >= self.screen[0] + 1200:
             self.floor_pos_x = -1200
-        self.current_frame += 1
-        if self.current_frame >= len(self.grass):
-            self.current_frame = 0
-        self.image = self.grass[self.current_frame]
+
 
     def draw(self, screen):
         screen.blit(self.image_bkg, (0,0))
         screen.blit(self.image_clouds,(0, 150))
         screen.blit(self.image_floor,(0, 750))
-        screen.blit(self.grass(0,700))
 
 
 
@@ -314,6 +337,7 @@ blue = 50
 alpha = 50
 dt = 12
 background = Background(dt, screen_res)
+grass = Grass()
 click =False
 mouse_motion = False
 running = True
@@ -353,6 +377,8 @@ while True:
     elif 70 >= blue > 50:
         blue -= 10
     screen.fill((red,green,blue,alpha))
+    grass.update()
+    grass.draw(screen)
     background.update()
     background.draw(screen)
     moving_character.draw(screen)
