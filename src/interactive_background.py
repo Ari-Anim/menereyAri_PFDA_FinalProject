@@ -189,7 +189,6 @@ class Character(pygame.sprite.Sprite):
 
 
 
-
 class Obstacles(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, screen_res):
         self.screen = screen_res
@@ -236,6 +235,12 @@ class Obstacles(pygame.sprite.Sprite):
 
 
 
+class Grass(pygame.sprite.Sprite):
+    def __init__(self):
+        pass
+
+
+
 class Background():
     def __init__(self, dt, screen_res):
         self.dt = dt
@@ -246,14 +251,41 @@ class Background():
         self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
         self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
         self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
+        self.cloud_pos_x = 0
+        self.floor_pos_x = -1200
+        self.grass_pos_y = 700
+        self.grass_pos_x = -1200
+        self.grass = []
+        self.grass.append(pygame.image.load('grass_i1.png'))
+        self.grass.append(pygame.image.load('grass_l1.png'))
+        self.grass.append(pygame.image.load('grass_l2.png'))
+        self.grass.append(pygame.image.load('grass_l3.png'))
+        self.grass.append(pygame.image.load('grass_i2.png'))
+        self.grass.append(pygame.image.load('grass_r1.png'))
+        self.grass.append(pygame.image.load('grass_r2.png'))
+        self.grass.append(pygame.image.load('grass_r3.png'))
+
+        self.current_frame = 0
+        self.image = self.grass[self.current_frame]
+
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.grass_pos_x,self.grass_pos_y]
+
     
     def update(self):
-        pass
+        self.floor_pos_x += 30
+        if self.floor_pos_x >= self.screen[0] + 1200:
+            self.floor_pos_x = -1200
+        self.current_frame += 1
+        if self.current_frame >= len(self.grass):
+            self.current_frame = 0
+        self.image = self.grass[self.current_frame]
 
     def draw(self, screen):
         screen.blit(self.image_bkg, (0,0))
         screen.blit(self.image_clouds,(0, 150))
         screen.blit(self.image_floor,(0, 750))
+        screen.blit(self.grass(0,700))
 
 
 
@@ -321,6 +353,7 @@ while True:
     elif 70 >= blue > 50:
         blue -= 10
     screen.fill((red,green,blue,alpha))
+    background.update()
     background.draw(screen)
     moving_character.draw(screen)
     moving_character.update()
