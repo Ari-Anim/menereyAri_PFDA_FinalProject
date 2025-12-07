@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, screen_res):
@@ -233,7 +234,13 @@ class Obstacles(pygame.sprite.Sprite):
             self.current_frame += 1
             if self.current_frame >= len(self.obstacle_frames):
                 self.current_frame = 0
+            self.pos_x += 30
+            if self.pos_x >= self.screen[0] + 100:
+                self.pos_x = -1 * random.randint(400, 600)
+            self.coords = (self.pos_x, self.pos_y)
             self.image = self.obstacle_frames[self.current_frame]
+
+
     
     def draw(self, surface):
         if self.looping == True:
