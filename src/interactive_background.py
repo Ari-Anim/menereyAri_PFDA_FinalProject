@@ -190,19 +190,6 @@ class Character(pygame.sprite.Sprite):
 
 
 
-"""class Background():
-    def __init__(self, dt, screen_res, red, green, blue):
-        self.dt = dt
-        self.screen = screen_res
-        self.red = red
-        self.green = green
-        self.blue = blue
-    
-    def update(self, click):
-        if click == True:
-            self.red += 50
-            self.blue += 50"""
-
 class Obstacles(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, screen_res):
         self.screen = screen_res
@@ -211,6 +198,7 @@ class Obstacles(pygame.sprite.Sprite):
         self.coords = (self.pos_x, self.pos_y)
         self.looping = False
         self.obstacle_frames = []
+        self.speed = 5
 
         self.obstacle_frames.append(pygame.image.load('obstacle_1.png'))
         self.obstacle_frames.append(pygame.image.load('obstacle_2.png'))
@@ -234,7 +222,7 @@ class Obstacles(pygame.sprite.Sprite):
             self.current_frame += 1
             if self.current_frame >= len(self.obstacle_frames):
                 self.current_frame = 0
-            self.pos_x += 30
+            self.pos_x += self.speed
             if self.pos_x >= self.screen[0] + 100:
                 self.pos_x = -1 * random.randint(400, 600)
             self.coords = (self.pos_x, self.pos_y)
@@ -245,6 +233,28 @@ class Obstacles(pygame.sprite.Sprite):
     def draw(self, surface):
         if self.looping == True:
             surface.blit(self.image,self.coords)
+
+
+
+class Background():
+    def __init__(self, dt, screen_res):
+        self.dt = dt
+        self.screen = screen_res
+        self.img_path = "bkg.png"
+        self.img_path_2 = "floor.png"
+        self.img_path_3 = "clouds.png"
+        self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
+        self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
+        self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
+    
+    def update(self):
+        pass
+
+    def draw(self, screen):
+        screen.blit(self.image_bkg, (0,0))
+        screen.blit(self.image_clouds,(0, 150))
+        screen.blit(self.image_floor,(0, 750))
+
 
 
 pygame.init()
@@ -266,11 +276,12 @@ obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
 mpos_y = 0
-dt = 12
 red = 50
 green = 0
 blue = 50
-#bkg = Background(dt, screen_res, red, green, blue)
+alpha = 50
+dt = 12
+background = Background(dt, screen_res)
 click =False
 mouse_motion = False
 running = True
@@ -309,8 +320,8 @@ while True:
         blue -= 5
     elif 70 >= blue > 50:
         blue -= 10
-
-    screen.fill((red,green,blue))
+    screen.fill((red,green,blue,alpha))
+    background.draw(screen)
     moving_character.draw(screen)
     moving_character.update()
     obstacle.draw(screen)
