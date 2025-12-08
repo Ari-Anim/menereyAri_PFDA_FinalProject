@@ -1,6 +1,5 @@
 import pygame
 import sys
-import random
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, screen_res):
@@ -144,9 +143,8 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 200
-                    if self.current_jump_frame >= len(self.frames_4):
                         self.pos_y = s_y - 150
+                    if self.current_jump_frame >= len(self.frames_4):
                         self.current_jump_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_jump_frame]
@@ -158,9 +156,8 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 200
+                        self.pos_y = s_y - 150
                     if self.current_jump_frame >= len(self.frames_6):
-                         self.pos_y = s_y - 150
                          self.current_jump_frame = 0
                          self.is_jumping = False
                     self.image = self.frames_6[self.current_jump_frame]
@@ -172,9 +169,8 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 200
-                    if self.current_jump_frame >= len(self.frames_2):
                         self.pos_y = s_y - 150
+                    if self.current_jump_frame >= len(self.frames_2):
                         self.current_jump_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_2[self.current_jump_frame]  
@@ -261,10 +257,10 @@ class Button():
     def __init__(self):
         self.width = 200
         self.hieght = 100
-        self.pos_x = 1100
+        self.pos_x = 1025
         self.pos_y = 100
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
-        self.display_text = "OBSTACLE \n TOGGLE"
+        self.display_text = "PURPLE GUY"
         self.box_color = (30,0,30)
         self.font_color = (140,0,140)
         self.selected_font_color = (160,0,160)
@@ -394,30 +390,6 @@ class Fog():
     def draw(self):
         screen.blit(self.image_fog,(self.fog_x, self.fog_y))
 
-class Points():
-    def __init__(self):
-        self.width = 1
-        self.hieght = 1
-        self.pos_x = 1000
-        self.pos_y = 400
-        self.point_counter = 0
-        self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
-        self.display_text = f"POINTS:{self.point_counter}"
-        self.font = pygame.font.SysFont("Arial", 50, bold=True)
-        self.color = (0,0,0)
-        self.text_color = (100,100,100)
-
-    def update(self):
-        self.point_counter -= 80
-        self.display_text = f"POINTS:{self.point_counter}"
-
-    def draw(self, surface, alive):
-        if alive == True:
-            pygame.draw.rect(surface, self.color, self.rect)
-
-            text_surface = self.font.render(self.display_text, True, self.text_color)
-            text_rect = text_surface.get_rect(center = self.rect.center)
-            surface.blit(text_surface, text_rect)
 
 
 pygame.init()
@@ -455,8 +427,7 @@ colliding = False
 char_rect = character.get_rect()
 obs_rect = obstacle
 check_button = button.check_clicked()
-points = Points()
-alive = False
+
 
 while True:
     for event in pygame.event.get():
@@ -474,7 +445,6 @@ while True:
             if event.button == 1:
                 click = True
                 character.jump(click)
-                #bkg.update(click)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:
                 character.end_loop()
@@ -483,21 +453,8 @@ while True:
                     button.check_clicked()
         if button.clicked == True:
             obstacle.check_looping(False)
-            alive = True
         elif button.clicked == False:
             obstacle.check_looping(True)
-            alive = False
-
-    #collision
-    if char_rect.colliderect(obs_rect) == True:
-        colliding = True
-    if colliding == True:
-        points.update()
-    if char_rect.colliderect(obs_rect) == False:
-        colliding = False
-    if colliding == False:
-            pass
-    #print(obstacle.pos_x)
     
     screen.fill((red,green,blue))
     background.update()
@@ -505,7 +462,6 @@ while True:
     grass.update()
     grass.draw(screen)
     button.draw(screen)
-    points.draw(screen,alive)
     fog.update()
     fog.draw()
     moving_character.draw(screen)
@@ -514,12 +470,6 @@ while True:
     obstacle.update()
     pygame.display.flip()
     clock.tick(12)
-
-    
-# TODO Make Background Customizeable 
-
-
-
 
 if __name__ == "__main__":
     main()
