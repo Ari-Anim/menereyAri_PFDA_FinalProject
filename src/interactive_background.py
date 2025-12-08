@@ -110,19 +110,19 @@ class Character(pygame.sprite.Sprite):
 
 
 
-    def update(self):
+    def update(self, speed):
         s_x = self.screen[0]
         s_y = self.screen[1]
         if self.is_jumping == False and self.looping == True:
             if self.move_r == True:
                 self.current_frame += 1
-                self.pos_x += 30
+                self.pos_x += speed
                 if self.current_frame >= len(self.frames_3):
                     self.current_frame = 0
                 self.image = self.frames_3[self.current_frame]
             elif self.move_l == True:
                 self.current_frame += 1
-                self.pos_x -=30
+                self.pos_x -=speed
                 if self.current_frame >= len(self.frames_5):
                     self.current_frame = 0
                 self.image = self.frames_5[self.current_frame]
@@ -138,7 +138,7 @@ class Character(pygame.sprite.Sprite):
              #self.current_frame = 0
              if self.move_r == True:
                     self.current_jump_frame += 1
-                    self.pos_x += 80
+                    self.pos_x += speed*2.5
                     if self.current_jump_frame == 1:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 2:
@@ -150,7 +150,7 @@ class Character(pygame.sprite.Sprite):
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_jump_frame]
              elif self.move_l == True:
-                    self.pos_x -= 80
+                    self.pos_x -= speed*2.5
                     self.current_jump_frame += 1
                     if self.current_jump_frame == 1:
                         self.pos_y = s_y - 200
@@ -187,6 +187,10 @@ class Character(pygame.sprite.Sprite):
             self.looping = False
             self.idle = True
 
+    def get_rect(self):
+        character_rect = self.rect
+        return character_rect
+
 
 
 class Obstacles(pygame.sprite.Sprite):
@@ -196,9 +200,11 @@ class Obstacles(pygame.sprite.Sprite):
         self.pos_y = pos_y
         self.coords = (self.pos_x, self.pos_y)
         self.looping = False
-        self.obstacle_frames = []
-        self.speed = 5
 
+
+
+        self.speed = 5
+        self.obstacle_frames = []
         self.obstacle_frames.append(pygame.image.load('obstacle_1.png'))
         self.obstacle_frames.append(pygame.image.load('obstacle_2.png'))
         self.obstacle_frames.append(pygame.image.load('obstacle_3.png'))
@@ -227,11 +233,15 @@ class Obstacles(pygame.sprite.Sprite):
             self.coords = (self.pos_x, self.pos_y)
             self.image = self.obstacle_frames[self.current_frame]
 
-
     
     def draw(self, surface):
         if self.looping == True:
             surface.blit(self.image,self.coords)
+    
+    def get_rect(self):
+        obstacle_rect = self.rect
+        return obstacle_rect
+
 
 
 
@@ -281,7 +291,6 @@ class Grass():
             surface.blit(self.grass[6], (0,self.grass_pos_y))
         if self.current_frame == 7:
             surface.blit(self.grass[7], (0,self.grass_pos_y))
-
 
 
 
@@ -343,7 +352,7 @@ pygame.display.set_caption("Character_Animation")
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
 char_y = screen_height - 150
-speed = 5
+speed = 30
 character = Character(char_x,char_y,screen_res)
 obst_x = screen_width//2 - 300
 obst_y = screen_height - 150
@@ -362,6 +371,9 @@ fog = Fog()
 click =False
 mouse_motion = False
 running = True
+colliding = False
+char_rect = character.get_rect()
+obs_rect = obstacle.get_rect()
 
 while True:
     for event in pygame.event.get():
@@ -388,15 +400,23 @@ while True:
                 red += 50
                 blue += 50
         obstacle.check_looping(running)
-    
-    if red > 70:
+    #collision
+
+    if char_rect.colliderect(obs_rect):
+        if character.move_l == True:
+            obstacle.pos_x -= 30
+        if character.move_r == True:
+            obstacle.pos_x += 30
+    #light
+    """if red > 70:
         red -= 5
     elif 70 >= red > 50:
         red -= 10
     if blue > 70:
         blue -= 5
     elif 70 >= blue > 50:
-        blue -= 10
+        blue -= 10"""
+    
     screen.fill((red,green,blue,alpha))
     background.update()
     background.draw(screen)
@@ -405,7 +425,7 @@ while True:
     fog.update()
     fog.draw()
     moving_character.draw(screen)
-    moving_character.update()
+    moving_character.update(speed)
     obstacle.draw(screen)
     obstacle.update()
     pygame.display.flip()
