@@ -200,8 +200,7 @@ class Obstacles(pygame.sprite.Sprite):
         self.pos_y = pos_y
         self.coords = (self.pos_x, self.pos_y)
         self.looping = False
-
-
+        self.alpha = 255
 
         self.speed = 5
         self.obstacle_frames = []
@@ -214,7 +213,7 @@ class Obstacles(pygame.sprite.Sprite):
         self.image = self.obstacle_frames[self.current_frame]
 
         self.rect = self.image.get_rect()
-        self.rect.topleft = [self.pos_x,self.pos_y]
+        self.rect.topleft = [self.pos_x, self.pos_y]
         self.rect_0 = self.rect[2]
         self.rect_1 = self.rect[3]
 
@@ -230,8 +229,8 @@ class Obstacles(pygame.sprite.Sprite):
             if self.current_frame >= len(self.obstacle_frames):
                 self.current_frame = 0
             self.pos_x += self.speed
-            if self.pos_x >= self.screen[0] + 100:
-                self.pos_x = -1 * random.randint(400, 600)
+            if self.pos_x >= 900:
+                self.pos_x = -100
             self.coords = (self.pos_x, self.pos_y)
             self.image = self.obstacle_frames[self.current_frame]
 
@@ -243,6 +242,9 @@ class Obstacles(pygame.sprite.Sprite):
     def get_new_rect(self):
         obstacle_rect = self.image.get_rect()
         return obstacle_rect
+    
+    def is_colliding(self, colliding):
+        pass
 
 
 
@@ -405,14 +407,9 @@ while True:
         obstacle.check_looping(running)
     #collision
 
-    if char_rect.colliderect(obs_rect):
-        colliding = True
-    if colliding == True:
-        if character.move_l == True:
-            obstacle.pos_x -= 50
-            points_counter += 1
-        if character.move_r == True:
-            obstacle.pos_x += 50
+    if char_rect.colliderect(obs_rect) == True:
+        obstacle.is_colliding()
+    
     print(obstacle.pos_x)
     #light
     """if red > 70:
@@ -424,7 +421,7 @@ while True:
     elif 70 >= blue > 50:
         blue -= 10"""
     
-    screen.fill((red,green,blue,alpha))
+    screen.fill((red,green,blue))
     background.update()
     background.draw(screen)
     grass.update()
@@ -439,10 +436,8 @@ while True:
     clock.tick(12)
 
     
-
-# TODO Implement background
 # TODO Make Background Customizeable 
-# TODO implement foreground
+
 
 
 
