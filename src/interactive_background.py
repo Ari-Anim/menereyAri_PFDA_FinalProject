@@ -237,18 +237,18 @@ class Obstacles(pygame.sprite.Sprite):
 
 class Grass():
     def __init__(self):
-        self.grass_pos_y = 500
+        self.grass_pos_y = 600
         self.grass_pos_x = -1200
 
         self.grass = []
-        self.grass.append(pygame.image.load('grass_i1.png'))
-        self.grass.append(pygame.image.load('grass_l1.png'))
-        self.grass.append(pygame.image.load('grass_l2.png'))
-        self.grass.append(pygame.image.load('grass_l3.png'))
-        self.grass.append(pygame.image.load('grass_i2.png'))
-        self.grass.append(pygame.image.load('grass_r1.png'))
-        self.grass.append(pygame.image.load('grass_r2.png'))
-        self.grass.append(pygame.image.load('grass_r3.png'))
+        self.grass.append(pygame.image.load('grass1.png'))
+        self.grass.append(pygame.image.load('grass2.png'))
+        self.grass.append(pygame.image.load('grass3.png'))
+        self.grass.append(pygame.image.load('grass4.png'))
+        self.grass.append(pygame.image.load('grass5.png'))
+        self.grass.append(pygame.image.load('grass6.png'))
+        self.grass.append(pygame.image.load('grass7.png'))
+        self.grass.append(pygame.image.load('grass8.png'))
 
         self.current_frame = 0
         self.image = self.grass[self.current_frame]
@@ -296,19 +296,39 @@ class Background():
         self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
         self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
         self.cloud_pos_x = 0
-        self.floor_pos_x = -1200
 
-    
+
+
     def update(self):
-        self.floor_pos_x += 30
-        if self.floor_pos_x >= self.screen[0] + 1200:
-            self.floor_pos_x = -1200
+        self.cloud_pos_x += 50
+        if self.cloud_pos_x >= 1200:
+            self.cloud_pos_x = -800
 
 
     def draw(self, screen):
         screen.blit(self.image_bkg, (0,0))
-        screen.blit(self.image_clouds,(0, 150))
+        screen.blit(self.image_clouds,(self.cloud_pos_x, 150))
         screen.blit(self.image_floor,(0, 750))
+
+
+
+class Fog():
+    def __init__(self):
+        self.img_path = "clouds2.png"
+        self.image_fog = pygame.image.load(self.img_path).convert_alpha()
+        self.fog_x = -2400
+        self.fog_y = 600
+
+        self.rect = self.image_fog.get_rect()
+        self.rect.topleft = [self.fog_x,self.fog_y]
+
+    def update(self):
+        self.fog_x += 60
+        if self.fog_x >= 1200:
+            self.fog_x = -2400
+
+    def draw(self):
+        screen.blit(self.image_fog,(self.fog_x, self.fog_y))
 
 
 
@@ -338,6 +358,7 @@ alpha = 50
 dt = 12
 background = Background(dt, screen_res)
 grass = Grass()
+fog = Fog()
 click =False
 mouse_motion = False
 running = True
@@ -377,10 +398,12 @@ while True:
     elif 70 >= blue > 50:
         blue -= 10
     screen.fill((red,green,blue,alpha))
-    grass.update()
-    grass.draw(screen)
     background.update()
     background.draw(screen)
+    grass.update()
+    grass.draw(screen)
+    fog.update()
+    fog.draw()
     moving_character.draw(screen)
     moving_character.update()
     obstacle.draw(screen)
