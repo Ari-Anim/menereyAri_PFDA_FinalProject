@@ -413,6 +413,7 @@ while True:
         obstacle.image.set_alpha(0)
     if obstacle.pos_x == -100:
         colliding = False
+    if colliding == False:
         if obstacle.image.get_alpha() == 0:
             obstacle.image.set_alpha(255)
     
