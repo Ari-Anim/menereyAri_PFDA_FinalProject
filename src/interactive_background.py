@@ -234,7 +234,7 @@ class Obstacles(pygame.sprite.Sprite):
             if self.current_frame >= len(self.obstacle_frames):
                 self.current_frame = 0
             self.pos_x += self.speed
-            if self.pos_x >= 900:
+            if self.pos_x >= 1200:
                 self.pos_x = -100
             self.coords = (self.pos_x, self.pos_y)
             self.image = self.obstacle_frames[self.current_frame]
@@ -259,16 +259,16 @@ class Obstacles(pygame.sprite.Sprite):
 
 class Button():
     def __init__(self):
-        self.width = 100
+        self.width = 200
         self.hieght = 100
         self.pos_x = 1100
         self.pos_y = 100
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
-        self.display_text = "Obstacle Toggle"
+        self.display_text = "OBSTACLE \n TOGGLE"
         self.box_color = (30,0,30)
         self.font_color = (140,0,140)
         self.selected_font_color = (160,0,160)
-        self.font = pygame.font.SysFont("Arial", 15)
+        self.font = pygame.font.SysFont("Arial", 25)
         self.selected_box_color = (10,0,10)
         self.clicked = False
         self.click_counter = 0 
@@ -396,7 +396,29 @@ class Fog():
 
 class Points():
     def __init__(self):
-        pass
+        self.width = 1
+        self.hieght = 1
+        self.pos_x = 1000
+        self.pos_y = 400
+        self.point_counter = 0
+        self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
+        self.display_text = f"POINTS:{self.point_counter}"
+        self.font = pygame.font.SysFont("Arial", 50, bold=True)
+        self.color = (0,0,0)
+        self.text_color = (100,100,100)
+
+    def update(self):
+        self.point_counter -= 80
+        self.display_text = f"POINTS:{self.point_counter}"
+
+    def draw(self, surface, alive):
+        if alive == True:
+            pygame.draw.rect(surface, self.color, self.rect)
+
+            text_surface = self.font.render(self.display_text, True, self.text_color)
+            text_rect = text_surface.get_rect(center = self.rect.center)
+            surface.blit(text_surface, text_rect)
+
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -432,8 +454,9 @@ running = True
 colliding = False
 char_rect = character.get_rect()
 obs_rect = obstacle
-points_counter = 0
 check_button = button.check_clicked()
+points = Points()
+alive = False
 
 while True:
     for event in pygame.event.get():
@@ -460,15 +483,20 @@ while True:
                     button.check_clicked()
         if button.clicked == True:
             obstacle.check_looping(False)
+            alive = True
         elif button.clicked == False:
             obstacle.check_looping(True)
+            alive = False
 
     #collision
-
     if char_rect.colliderect(obs_rect) == True:
         colliding = True
     if colliding == True:
-        points_counter += 1
+        points.update()
+    if char_rect.colliderect(obs_rect) == False:
+        colliding = False
+    if colliding == False:
+            pass
     #print(obstacle.pos_x)
     
     screen.fill((red,green,blue))
@@ -477,6 +505,7 @@ while True:
     grass.update()
     grass.draw(screen)
     button.draw(screen)
+    points.draw(screen,alive)
     fog.update()
     fog.draw()
     moving_character.draw(screen)
