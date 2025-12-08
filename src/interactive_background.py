@@ -218,8 +218,8 @@ class Obstacles(pygame.sprite.Sprite):
         self.rect_1 = self.rect[3]
 
 
-    def check_looping(self, running):
-        if running == True:
+    def check_looping(self, button_on):
+        if button_on == True:
             self.looping = True
 
 
@@ -242,11 +242,37 @@ class Obstacles(pygame.sprite.Sprite):
     def get_new_rect(self):
         obstacle_rect = self.image.get_rect()
         return obstacle_rect
-    
-    def is_colliding(self, colliding):
-        pass
 
 
+
+class Button():
+    def __init__(self):
+        self.width = 100
+        self.hieght = 100
+        self.pos_x = 900
+        self.pos_y = 100
+        self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
+        self.display_text = "Obstacle Toggle"
+        self.box_color = (80,0,80)
+        self.font_color = (140,0,140)
+        self.selected_font_color = (120,0,120)
+        self.font = pygame.font.SysFont("Times New Roman", 15)
+        self.selected_box_color = (60,0,60)
+
+    def draw(self,surface):
+        mouse_pos = pygame.mouse.get_pos()
+        color = self.box_color
+        if self.rect.collidepoint(mouse_pos):
+            color = self.selected_box_color
+        color_font = self.font_color
+        if self.rect.collidepoint(mouse_pos):
+            color_font = self.selected_font_color
+        
+        pygame.draw.rect(surface, color, self.rect)
+
+        text_surface = self.font.render(self.display_text, True, self.font_color)
+        text_rect = text_surface.get_rect(center = self.rect.center)
+        surface.blit(text_surface, text_rect)
 
 
 class Grass():
@@ -370,6 +396,7 @@ blue = 50
 alpha = 50
 dt = 12
 background = Background(dt, screen_res)
+button = Button()
 grass = Grass()
 fog = Fog()
 click =False
@@ -433,6 +460,7 @@ while True:
     background.draw(screen)
     grass.update()
     grass.draw(screen)
+    button.draw(screen)
     fog.update()
     fog.draw()
     moving_character.draw(screen)
