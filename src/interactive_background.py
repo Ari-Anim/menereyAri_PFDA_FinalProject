@@ -144,8 +144,9 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 150
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame >= len(self.frames_4):
+                        self.pos_y = s_y - 150
                         self.current_jump_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_4[self.current_jump_frame]
@@ -157,8 +158,9 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 150
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame >= len(self.frames_6):
+                         self.pos_y = s_y - 150
                          self.current_jump_frame = 0
                          self.is_jumping = False
                     self.image = self.frames_6[self.current_jump_frame]
@@ -170,8 +172,9 @@ class Character(pygame.sprite.Sprite):
                     if self.current_jump_frame == 2:
                         self.pos_y = s_y - 200
                     if self.current_jump_frame == 3:
-                        self.pos_y = s_y - 150
+                        self.pos_y = s_y - 200
                     if self.current_jump_frame >= len(self.frames_2):
+                        self.pos_y = s_y - 150
                         self.current_jump_frame = 0
                         self.is_jumping = False
                     self.image = self.frames_2[self.current_jump_frame]  
@@ -262,11 +265,11 @@ class Button():
         self.pos_y = 100
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
         self.display_text = "Obstacle Toggle"
-        self.box_color = (80,0,80)
+        self.box_color = (30,0,30)
         self.font_color = (140,0,140)
         self.selected_font_color = (160,0,160)
-        self.font = pygame.font.SysFont("Times New Roman", 15)
-        self.selected_box_color = (60,0,60)
+        self.font = pygame.font.SysFont("Arial", 15)
+        self.selected_box_color = (10,0,10)
         self.clicked = False
         self.click_counter = 0 
 
@@ -407,7 +410,7 @@ char_y = screen_height - 150
 speed = 30
 character = Character(char_x,char_y,screen_res)
 obst_x = screen_width//2 - 300
-obst_y = screen_height - 150
+obst_y = screen_height - 80
 obstacle = Obstacles(obst_x, obst_y, screen_res)
 moving_character.add(character)
 mpos_x = 0
