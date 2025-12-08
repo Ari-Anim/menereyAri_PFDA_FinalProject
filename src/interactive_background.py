@@ -249,15 +249,16 @@ class Button():
     def __init__(self):
         self.width = 100
         self.hieght = 100
-        self.pos_x = 900
+        self.pos_x = 1100
         self.pos_y = 100
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
         self.display_text = "Obstacle Toggle"
         self.box_color = (80,0,80)
         self.font_color = (140,0,140)
-        self.selected_font_color = (120,0,120)
+        self.selected_font_color = (160,0,160)
         self.font = pygame.font.SysFont("Times New Roman", 15)
         self.selected_box_color = (60,0,60)
+        self.clicked = False
 
     def draw(self,surface):
         mouse_pos = pygame.mouse.get_pos()
@@ -270,9 +271,17 @@ class Button():
         
         pygame.draw.rect(surface, color, self.rect)
 
-        text_surface = self.font.render(self.display_text, True, self.font_color)
+        text_surface = self.font.render(self.display_text, True, color_font)
         text_rect = text_surface.get_rect(center = self.rect.center)
         surface.blit(text_surface, text_rect)
+    
+    def check_clicked(self):
+        self.clicked = True
+        return self.clicked
+    
+    def check_not_clicked(self):
+        self.clicked = False
+        return self.clicked
 
 
 class Grass():
@@ -427,10 +436,16 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:
                 character.end_loop()
+            if event.button == 1:
+                if button.rect.collidepoint(event.pos):
+                    button.check_clicked()
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 red += 50
                 blue += 50
+            if event.button == 1:
+                if button.rect.collidepoint(event.pos):
+                    button.check_not_clicked()
         obstacle.check_looping(running)
     #collision
 
@@ -444,7 +459,7 @@ while True:
         if obstacle.image.get_alpha() == 0:
             obstacle.image.set_alpha(255)
     
-    print(obstacle.pos_x)
+    #print(obstacle.pos_x)
     #light
     """if red > 70:
         red -= 5
@@ -454,6 +469,9 @@ while True:
         blue -= 5
     elif 70 >= blue > 50:
         blue -= 10"""
+    
+    if button.clicked == True:
+        print("clicked")
     
     screen.fill((red,green,blue))
     background.update()
