@@ -394,7 +394,9 @@ class Fog():
     def draw(self):
         screen.blit(self.image_fog,(self.fog_x, self.fog_y))
 
-
+class Points():
+    def __init__(self):
+        pass
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -456,10 +458,6 @@ while True:
             if event.button == 1:
                 if button.rect.collidepoint(event.pos):
                     button.check_clicked()
-        if event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:
-                red += 50
-                blue += 50
         if button.clicked == True:
             obstacle.check_looping(False)
         elif button.clicked == False:
@@ -470,12 +468,7 @@ while True:
     if char_rect.colliderect(obs_rect) == True:
         colliding = True
     if colliding == True:
-        obstacle.image.set_alpha(0)
-    if obstacle.pos_x == -100:
-        colliding = False
-    if colliding == False:
-        if obstacle.image.get_alpha() == 0:
-            obstacle.image.set_alpha(255)
+        points_counter += 1
     #print(obstacle.pos_x)
     
     screen.fill((red,green,blue))
