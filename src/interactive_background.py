@@ -295,14 +295,14 @@ class Background():
         self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
         self.image_floor = pygame.image.load(self.img_path_2).convert_alpha()
         self.image_clouds = pygame.image.load(self.img_path_3).convert_alpha()
-        self.cloud_pos_x = 0
+        self.cloud_pos_x = -800
 
 
 
     def update(self):
-        self.cloud_pos_x += 50
-        if self.cloud_pos_x >= 1200:
-            self.cloud_pos_x = -800
+        self.cloud_pos_x += 10
+        if self.cloud_pos_x >= 1800:
+            self.cloud_pos_x = -2400
 
 
     def draw(self, screen):
