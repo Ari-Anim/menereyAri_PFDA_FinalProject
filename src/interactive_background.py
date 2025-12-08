@@ -408,7 +408,13 @@ while True:
     #collision
 
     if char_rect.colliderect(obs_rect) == True:
-        obstacle.is_colliding()
+        colliding = True
+    if colliding == True:
+        obstacle.image.set_alpha(0)
+    if obstacle.pos_x == -100:
+        colliding = False
+        if obstacle.image.get_alpha() == 0:
+            obstacle.image.set_alpha(255)
     
     print(obstacle.pos_x)
     #light
