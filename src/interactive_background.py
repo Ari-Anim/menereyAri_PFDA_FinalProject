@@ -215,6 +215,8 @@ class Obstacles(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.pos_x,self.pos_y]
+        self.rect_0 = self.rect[2]
+        self.rect_1 = self.rect[3]
 
 
     def check_looping(self, running):
@@ -238,8 +240,8 @@ class Obstacles(pygame.sprite.Sprite):
         if self.looping == True:
             surface.blit(self.image,self.coords)
     
-    def get_rect(self):
-        obstacle_rect = self.rect
+    def get_new_rect(self):
+        obstacle_rect = self.image.get_rect()
         return obstacle_rect
 
 
@@ -373,7 +375,8 @@ mouse_motion = False
 running = True
 colliding = False
 char_rect = character.get_rect()
-obs_rect = obstacle.get_rect()
+obs_rect = obstacle
+points_counter = 0
 
 while True:
     for event in pygame.event.get():
@@ -403,10 +406,14 @@ while True:
     #collision
 
     if char_rect.colliderect(obs_rect):
+        colliding = True
+    if colliding == True:
         if character.move_l == True:
-            obstacle.pos_x -= 30
+            obstacle.pos_x -= 50
+            points_counter += 1
         if character.move_r == True:
-            obstacle.pos_x += 30
+            obstacle.pos_x += 50
+    print(obstacle.pos_x)
     #light
     """if red > 70:
         red -= 5
