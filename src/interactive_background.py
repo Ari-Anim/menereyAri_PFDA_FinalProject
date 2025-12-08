@@ -218,9 +218,11 @@ class Obstacles(pygame.sprite.Sprite):
         self.rect_1 = self.rect[3]
 
 
-    def check_looping(self, button_on):
-        if button_on == True:
+    def check_looping(self, check_button):
+        if check_button == False:
             self.looping = True
+        if check_button == True:
+            self.looping = False
 
 
     def update(self):
@@ -231,6 +233,13 @@ class Obstacles(pygame.sprite.Sprite):
             self.pos_x += self.speed
             if self.pos_x >= 900:
                 self.pos_x = -100
+            self.coords = (self.pos_x, self.pos_y)
+            self.image = self.obstacle_frames[self.current_frame]
+        if self.looping == False:
+            self.current_frame += 1
+            if self.current_frame >= len(self.obstacle_frames):
+                self.current_frame = 0
+            self.pos_x = 100
             self.coords = (self.pos_x, self.pos_y)
             self.image = self.obstacle_frames[self.current_frame]
 
@@ -259,6 +268,7 @@ class Button():
         self.font = pygame.font.SysFont("Times New Roman", 15)
         self.selected_box_color = (60,0,60)
         self.clicked = False
+        self.click_counter = 0 
 
     def draw(self,surface):
         mouse_pos = pygame.mouse.get_pos()
@@ -274,14 +284,17 @@ class Button():
         text_surface = self.font.render(self.display_text, True, color_font)
         text_rect = text_surface.get_rect(center = self.rect.center)
         surface.blit(text_surface, text_rect)
+
     
     def check_clicked(self):
-        self.clicked = True
-        return self.clicked
-    
-    def check_not_clicked(self):
-        self.clicked = False
-        return self.clicked
+        self.click_counter += 1
+        if self.click_counter % 2 != 0:
+            self.clicked = True
+            return True
+        else:
+            self.clicked = False
+            return False
+
 
 
 class Grass():
@@ -415,6 +428,7 @@ colliding = False
 char_rect = character.get_rect()
 obs_rect = obstacle
 points_counter = 0
+check_button = button.check_clicked()
 
 while True:
     for event in pygame.event.get():
@@ -443,10 +457,11 @@ while True:
             if event.button == 1:
                 red += 50
                 blue += 50
-            if event.button == 1:
-                if button.rect.collidepoint(event.pos):
-                    button.check_not_clicked()
-        obstacle.check_looping(running)
+        if button.clicked == True:
+            obstacle.check_looping(False)
+        elif button.clicked == False:
+            obstacle.check_looping(True)
+
     #collision
 
     if char_rect.colliderect(obs_rect) == True:
@@ -458,20 +473,7 @@ while True:
     if colliding == False:
         if obstacle.image.get_alpha() == 0:
             obstacle.image.set_alpha(255)
-    
     #print(obstacle.pos_x)
-    #light
-    """if red > 70:
-        red -= 5
-    elif 70 >= red > 50:
-        red -= 10
-    if blue > 70:
-        blue -= 5
-    elif 70 >= blue > 50:
-        blue -= 10"""
-    
-    if button.clicked == True:
-        print("clicked")
     
     screen.fill((red,green,blue))
     background.update()
