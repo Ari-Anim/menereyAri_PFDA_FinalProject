@@ -1,10 +1,10 @@
 # Interactive_Background
 
 ## Demo
-Demo Video:<https://youtu.be/_Lh8OV6PsW4>
+Demo Video:[Demo](https://youtu.be/_Lh8OV6PsW4)
 
 ## GitHub Repository
-GitHub Repo:<https://github.com/Ari-Anim/menereyAri_PFDA_FinalProject>
+GitHub Repo:[Repo](https://github.com/Ari-Anim/menereyAri_PFDA_FinalProject)
 
 ## Description
 
