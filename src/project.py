@@ -260,7 +260,7 @@ class Button():
         self.pos_x = 1025
         self.pos_y = 100
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.hieght)
-        self.display_text = "PURPLE GUY"
+        self.display_text = "DAY"
         self.box_color = (30,0,30)
         self.font_color = (140,0,140)
         self.selected_font_color = (160,0,160)
@@ -268,6 +268,7 @@ class Button():
         self.selected_box_color = (10,0,10)
         self.clicked = False
         self.click_counter = 0 
+        self.alt_box_color = 60,120,180
 
     def draw(self,surface):
         mouse_pos = pygame.mouse.get_pos()
@@ -277,6 +278,12 @@ class Button():
         color_font = self.font_color
         if self.rect.collidepoint(mouse_pos):
             color_font = self.selected_font_color
+        
+        if self.click_counter % 2 != 0:
+            pass
+        else:
+            color = self.alt_box_color
+            self.display_text = "NIGHT"
         
         pygame.draw.rect(surface, color, self.rect)
 
@@ -350,6 +357,7 @@ class Background():
         self.dt = dt
         self.screen = screen_res
         self.img_path = "bkg.png"
+        self.img_alt_path = "bkg_2.png"
         self.img_path_2 = "floor.png"
         self.img_path_3 = "clouds.png"
         self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
@@ -359,7 +367,12 @@ class Background():
 
 
 
-    def update(self):
+    def update(self, layout):
+        if layout == True:
+                self.image_bkg = pygame.image.load(self.img_path).convert_alpha()
+        if layout == False:
+                self.image_bkg = pygame.image.load(self.img_alt_path).convert_alpha()
+
         self.cloud_pos_x += 10
         if self.cloud_pos_x >= 1800:
             self.cloud_pos_x = -2400
@@ -399,7 +412,7 @@ screen_width = 1200
 screen_height = 800
 screen_res = [screen_width,screen_height]
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Character_Animation")
+pygame.display.set_caption("interactive_background")
 moving_character = pygame.sprite.Group()
 char_x = screen_width//2 - 150
 char_y = screen_height - 150
@@ -427,6 +440,7 @@ colliding = False
 char_rect = character.get_rect()
 obs_rect = obstacle
 check_button = button.check_clicked()
+layout = True
 
 
 while True:
@@ -452,12 +466,14 @@ while True:
                 if button.rect.collidepoint(event.pos):
                     button.check_clicked()
         if button.clicked == True:
+            layout = True
             obstacle.check_looping(False)
         elif button.clicked == False:
+            layout = False
             obstacle.check_looping(True)
     
     screen.fill((red,green,blue))
-    background.update()
+    background.update(layout)
     background.draw(screen)
     grass.update()
     grass.draw(screen)
